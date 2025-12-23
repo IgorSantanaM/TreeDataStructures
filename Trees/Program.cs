@@ -10,3 +10,4 @@ Heap heap = new Heap();
 heap.Insert(10);
 heap.Insert(20);
 heap.Insert(30);
+heap.Remove();

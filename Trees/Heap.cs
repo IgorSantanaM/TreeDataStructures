@@ -14,38 +14,60 @@
 
             BubbleUp();
         }
-        public void Remove()
+        public int Remove()
         {
             if (IsEmpty())
                 throw new ArgumentException();
-
+            var root = Items[0];    
             Items[0] = Items[--Size];
 
             BubbleDown();
+            return root;
         }
 
+        
         public bool IsEmpty()
             => Size == 0;
 
         private void BubbleDown()
         {
             var index = 0;
-            while ( index <= Size && !IsValidParent(index))
+            while (index <= Size && !IsValidParent(index))
             {
                 var largerChildIndex = LargerChildIndex(index);
                 Swap(index, largerChildIndex);
                 index = largerChildIndex;
             }
         }
+        private bool HasLeftChild(int index)
+            => LeftChildIndex(index) <= Size;
+        private bool HasRightChild(int index)
+            => RightChildIndex(index) <= Size;
 
         private int LargerChildIndex(int index)
-            => (LeftChild(index) > RightChild(index))
-                    ? LeftChild(index)
-                    : RightChild(index);
+        {
+            if (!HasLeftChild(index))
+                return index;
 
+            if (!HasRightChild(index))
+                return LeftChildIndex(index);
 
-        private bool IsValidParent(int index) 
-            => Items[index] >= LeftChild(index) && Items[index] >= RightChild(index);
+            return (LeftChild(index) > RightChild(index))
+                        ? LeftChildIndex(index)
+                        : RightChildIndex(index);
+        }
+
+        private bool IsValidParent(int index)
+        {
+            if (!HasLeftChild(index)) return true;
+
+            var isValid = Items[index] >= LeftChild(index);
+
+            if (HasRightChild(index))
+                isValid &= Items[index] == RightChild(index);
+
+            return isValid;
+        }
 
         private int LeftChild(int index)
             => Items[LeftChildIndex(index)];
@@ -81,6 +103,5 @@
             Items[first] = Items[second];
             Items[second] = temp;
         }
-
     }
 }
