@@ -1,4 +1,6 @@
-﻿namespace Trees
+﻿using System;
+
+namespace Trees.Heap
 {
     public class Heap
     {
@@ -18,14 +20,65 @@
         {
             if (IsEmpty())
                 throw new ArgumentException();
-            var root = Items[0];    
+            var root = Items[0];
             Items[0] = Items[--Size];
 
             BubbleDown();
             return root;
         }
+        public bool IsMaxHeap(int[] array)
+        {
+            var lastParent = (array.Length / 2) - 1;
+            bool statement = true;
+            for(int i = lastParent; i >= 0; i--)
+            {
+                statement = IsMaxHeap(array, i);
+            }
 
-        
+            return statement;
+        }
+
+        public bool IsMaxHeap(int[] array, int index)
+        {
+            int leftChildIndex = (index * 2) + 1;
+            int rightChildIndex = (index * 2) + 2;
+
+            if (array[index] < array[leftChildIndex] || array[index] < array[rightChildIndex])
+                return false;
+
+            return true;
+        }
+
+        public bool IsMinHeap(int[] array)
+        {
+            var lastParent = (array.Length / 2) - 1;
+            bool statement = true;
+            for (int i = lastParent; i >= 0; i--)
+            {
+                statement = IsMinHeap(array, i);
+            }
+
+            return statement;
+        }
+
+        public bool IsMinHeap(int[] array, int index)
+        {
+            int leftChildIndex = (index * 2) + 1;
+            int rightChildIndex = (index * 2) + 2;
+
+            if (array[index] > array[leftChildIndex] || array[index] > array[rightChildIndex])
+                return false;
+
+            return true;
+        }
+
+        public int Max()
+        {
+            if (IsEmpty())
+                throw new ArgumentException();
+            return Items[0];
+        }
+
         public bool IsEmpty()
             => Size == 0;
 
@@ -89,8 +142,10 @@
 
             while (index > 0 && Items[index] > Items[ParentIndex(index)])
             {
-                Swap(index, ParentIndex(index));
-                index = ParentIndex(index);
+                int largerIndex = ParentIndex(index);
+
+                Swap(index, largerIndex);
+                index = largerIndex;
             }
         }
 

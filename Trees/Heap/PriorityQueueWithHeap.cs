@@ -1,4 +1,4 @@
-﻿namespace Trees
+﻿namespace Trees.Heap
 {
     public class PriorityQueueWithHeap
     {
